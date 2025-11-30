@@ -15,7 +15,7 @@ const questions = [
     options: [
       "I get excited when tackling bosses, domains, or Spiral Abyss challenges.",
       "I love exploring every corner of Teyvat, finding hidden treasures and secrets.",
-      "Completing events, quests, and side content around the world is more fun than challenging battles.",
+      "Completing events, quests, and side content is more fun than challenging battles.",
     ],
     letters: ["D", "E"],
   },
@@ -23,9 +23,9 @@ const questions = [
     axis: "Approach",
     key: "approach",
     options: [
-      "I like experimenting with different team compositions and improvising strategies.",
-      "I enjoy carefully planning builds, artifacts, and team synergy for maximum efficiency.",
-      "I often try unconventional combos or “fun” strategies just for enjoyment.",
+      "I like experimenting with different team compositions.",
+      "I enjoy carefully planning builds and team synergy.",
+      "I try unconventional combos or fun strategies.",
     ],
     letters: ["F", "P"],
   },
@@ -33,9 +33,9 @@ const questions = [
     axis: "Lore Engagement",
     key: "lore",
     options: [
-      "I focus on understanding the official story, character quests, and worldbuilding.",
-      "I enjoy creating or following fan theories, memes, and alternate universe (AU) ideas.",
-      "I pay attention to in-game lore and canonical details more than community headcanons.",
+      "I focus on understanding the official story.",
+      "I enjoy fan theories, memes, and AU ideas.",
+      "I pay attention to canonical in-game lore.",
     ],
     letters: ["C", "N"],
   },
@@ -43,21 +43,32 @@ const questions = [
 
 const results = {
   ADFC: "Aggressive Dungeon Freeform Canonist – You smash through bosses for fun while staying true to the official lore.",
-  ADFN: "Aggressive Dungeon Freeform Non-Canon – You charge into domains while enjoying fan theories and wild headcanons.",
-  ADPC: "Aggressive Dungeon Planned Canonist – You dominate Abyss floors with careful planning, keeping story accuracy in mind.",
-  ADPN: "Aggressive Dungeon Planned Non-Canon – You meticulously tackle challenges while indulging in AU content and memes.",
-  AEFC: "Aggressive Explorer Freeform Canonist – You explore Teyvat freely, enjoying the world as it’s meant to be.",
-  AEFN: "Aggressive Explorer Freeform Non-Canon – You roam Teyvat and let fanon and memes guide your journey.",
-  AEPC: "Aggressive Explorer Planned Canonist – You chart out your exploration for maximum efficiency while following the story.",
-  AEPN: "Aggressive Explorer Planned Non-Canon – You plan every adventure while embracing headcanons and fan culture.",
-  SDFC: "Strategic Dungeon Freeform Canonist – You thoughtfully tackle domains while staying true to the lore.",
-  SDFN: "Strategic Dungeon Freeform Non-Canon – You approach bosses with strategy while enjoying AU and fan theories.",
-  SDPC: "Strategic Dungeon Planned Canonist – You dominate Abyss with precision, respecting the story’s details.",
-  SDPN: "Strategic Dungeon Planned Non-Canon – You meticulously plan every challenge while indulging in fan content.",
-  SEFC: "Strategic Explorer Freeform Canonist – You roam freely but pay attention to lore and worldbuilding.",
-  SEFN: "Strategic Explorer Freeform Non-Canon – You explore creatively, guided by memes and headcanons.",
-  SEPC: "Strategic Explorer Planned Canonist – You explore methodically with story accuracy as your compass.",
-  SEPN: "Strategic Explorer Planned Non-Canon – You carefully explore while reveling in fan theories and AU adventures.",
+  ADFN: "Aggressive Dungeon Freeform Non-Canon – You charge into domains while enjoying fan theories.",
+  ADPC: "Aggressive Dungeon Planned Canonist.",
+  ADPN: "Aggressive Dungeon Planned Non-Canon.",
+  AEFC: "Aggressive Explorer Freeform Canonist.",
+  AEFN: "Aggressive Explorer Freeform Non-Canon.",
+  AEPC: "Aggressive Explorer Planned Canonist.",
+  AEPN: "Aggressive Explorer Planned Non-Canon.",
+  SDFC: "Strategic Dungeon Freeform Canonist.",
+  SDFN: "Strategic Dungeon Freeform Non-Canon.",
+  SDPC: "Strategic Dungeon Planned Canonist.",
+  SDPN: "Strategic Dungeon Planned Non-Canon.",
+  SEFC: "Strategic Explorer Freeform Canonist.",
+  SEFN: "Strategic Explorer Freeform Non-Canon.",
+  SEPC: "Strategic Explorer Planned Canonist.",
+  SEPN: "Strategic Explorer Planned Non-Canon.",
+};
+
+const themes = {
+  A: { main: "#ff5733", accent: "#ff9a7a", glow: "rgba(255,120,75,0.7)" },
+  S: { main: "#7fc6ff", accent: "#b5e1ff", glow: "rgba(120,200,255,0.7)" },
+  D: { main: "#e2c877", accent: "#ffe8a0", glow: "rgba(240,210,100,0.7)" },
+  E: { main: "#66cc77", accent: "#99e2a7", glow: "rgba(120,230,140,0.7)" },
+  F: { main: "#b37fff", accent: "#d0afff", glow: "rgba(180,120,255,0.7)" },
+  P: { main: "#3fb8c8", accent: "#89e2eb", glow: "rgba(90,210,220,0.7)" },
+  C: { main: "#d8c470", accent: "#f0e3a0", glow: "rgba(240,220,120,0.7)" },
+  N: { main: "#6bd7c9", accent: "#a8efe8", glow: "rgba(120,250,230,0.7)" },
 };
 
 const scale = [
@@ -67,10 +78,9 @@ const scale = [
   "Somewhat Disagree",
   "Disagree",
 ];
-const scaleWeights = [2, 1, 0.5, 0.5, 1, 2]; // weighted mapping, will use index 0-4
+const scaleWeights = [2, 1, 0.5, 0.5, 1];
 
 let currentQuestionIndex = 0;
-let answers = { combat: 0, gameplay: 0, approach: 0, lore: 0 };
 let totalCounts = {
   combat: { A: 0, S: 0 },
   gameplay: { D: 0, E: 0 },
@@ -86,35 +96,59 @@ function renderQuestion() {
   const qIndex = Math.floor(currentQuestionIndex / 3);
   const axis = questions[qIndex];
   const qNum = currentQuestionIndex % 3;
+
   questionContainer.innerHTML = `<div class="question"><strong>${axis.axis}:</strong> ${axis.options[qNum]}</div>`;
   optionsContainer.innerHTML = "";
+
   scale.forEach((label, i) => {
     const btn = document.createElement("button");
     btn.innerText = label;
     btn.onclick = () => selectAnswer(qIndex, axis.letters, i);
     optionsContainer.appendChild(btn);
   });
+
   progress.style.width = `${(currentQuestionIndex / 12) * 100}%`;
 }
 
+function updateTheme() {
+  let combo = "";
+  for (let axis in totalCounts) {
+    const letters = Object.keys(totalCounts[axis]);
+    const winner =
+      totalCounts[axis][letters[0]] >= totalCounts[axis][letters[1]]
+        ? letters[0]
+        : letters[1];
+    combo += winner;
+  }
+  const dominant = combo[combo.length - 1];
+  const t = themes[dominant];
+
+  document.documentElement.style.setProperty("--theme-main", t.main);
+  document.documentElement.style.setProperty("--theme-accent", t.accent);
+  document.documentElement.style.setProperty("--theme-glow", t.glow);
+}
+
 function selectAnswer(axisIndex, letters, scaleIndex) {
-  const firstLetter = letters[0];
-  const secondLetter = letters[1];
-  if (scaleIndex <= 2) {
-    // leaning toward first letter
-    totalCounts[questions[axisIndex].key][firstLetter] +=
-      scaleWeights[scaleIndex];
-  } else {
-    // leaning toward second letter
-    totalCounts[questions[axisIndex].key][secondLetter] +=
-      scaleWeights[scaleIndex];
-  }
-  currentQuestionIndex++;
-  if (currentQuestionIndex >= 12) {
-    showResults();
-  } else {
-    renderQuestion();
-  }
+  document.querySelector(".container").classList.add("dissolve-out");
+
+  setTimeout(() => {
+    document.querySelector(".container").classList.remove("dissolve-out");
+
+    const first = letters[0];
+    const second = letters[1];
+
+    if (scaleIndex <= 2) {
+      totalCounts[questions[axisIndex].key][first] += scaleWeights[scaleIndex];
+    } else {
+      totalCounts[questions[axisIndex].key][second] += scaleWeights[scaleIndex];
+    }
+
+    updateTheme();
+    currentQuestionIndex++;
+
+    if (currentQuestionIndex >= 12) showResults();
+    else renderQuestion();
+  }, 450);
 }
 
 function showResults() {
@@ -130,25 +164,76 @@ function showResults() {
         ? letters[0]
         : letters[1];
   }
+
+  const t = themes[type[0]];
+  document.documentElement.style.setProperty("--theme-main", t.main);
+  document.documentElement.style.setProperty("--theme-accent", t.accent);
+  document.documentElement.style.setProperty("--theme-glow", t.glow);
+
   document.getElementById("type").innerText = type;
   document.getElementById("description").innerText = results[type];
 
-  // show bar chart
   const barsDiv = document.getElementById("bars");
   barsDiv.innerHTML = "";
+
   for (let key in totalCounts) {
     const letters = Object.keys(totalCounts[key]);
     const total = totalCounts[key][letters[0]] + totalCounts[key][letters[1]];
     const percent1 = ((totalCounts[key][letters[0]] / total) * 100).toFixed(0);
-    const percent2 = ((totalCounts[key][letters[1]] / total) * 100).toFixed(0);
+
     barsDiv.innerHTML += `
-      <div class="bar-label">${letters[0]}: ${percent1}% | ${letters[1]}: ${percent2}%</div>
+      <div class="bar-label">${letters[0]}: ${percent1}% | ${letters[1]}: ${
+      100 - percent1
+    }%</div>
       <div class="bar-container">
-        <div class="bar" style="width:${percent1}%;"></div>
-        <div class="bar" style="width:${percent2}%; background:#f39c12;"></div>
-      </div>
-    `;
+        <div class="bar" style="--final-width:${percent1}%"></div>
+      </div>`;
   }
 }
+
+const canvas = document.getElementById("particles");
+const ctx = canvas.getContext("2d");
+
+let w, h;
+function resize() {
+  w = canvas.width = window.innerWidth;
+  h = canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener("resize", resize);
+
+const particles = [];
+for (let i = 0; i < 70; i++) {
+  particles.push({
+    x: Math.random() * w,
+    y: Math.random() * h,
+    r: Math.random() * 2 + 1,
+    d: Math.random() * 1 + 0.2,
+  });
+}
+
+function animateParticles() {
+  ctx.clearRect(0, 0, w, h);
+  ctx.fillStyle = "white";
+
+  particles.forEach((p) => {
+    ctx.globalAlpha = 0.25 * p.r;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    ctx.fill();
+
+    p.y += p.d;
+    if (p.y > h) {
+      p.y = 0;
+      p.x = Math.random() * w;
+    }
+  });
+
+  requestAnimationFrame(animateParticles);
+}
+animateParticles();
+
+renderQuestion();
+updateTheme();
 
 renderQuestion();
