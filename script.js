@@ -42,8 +42,8 @@ const questions = [
 ];
 
 const results = {
-  ADFC: "Aggressive Dungeon Freeform Canonist – You smash through bosses for fun while staying true to the official lore.",
-  ADFN: "Aggressive Dungeon Freeform Non-Canon – You charge into domains while enjoying fan theories.",
+  ADFC: "Aggressive Dungeon Freeform Canonist - You smash through bosses for fun while staying true to the official lore.",
+  ADFN: "Aggressive Dungeon Freeform Non-Canon - You charge into domains while enjoying fan theories.",
   ADPC: "Aggressive Dungeon Planned Canonist.",
   ADPN: "Aggressive Dungeon Planned Non-Canon.",
   AEFC: "Aggressive Explorer Freeform Canonist.",
@@ -77,8 +77,10 @@ const scale = [
   "Somewhat Agree",
   "Somewhat Disagree",
   "Disagree",
+  "Strongly Disagree",
 ];
-const scaleWeights = [2, 1, 0.5, 0.5, 1];
+
+const scaleWeights = [2, 1, 0.5, 0.5, 1, 2];
 
 let currentQuestionIndex = 0;
 let totalCounts = {
