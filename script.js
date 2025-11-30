@@ -4,7 +4,7 @@ const questions = [
     key: "combat",
     options: [
       "I enjoy diving straight into combat and dealing massive damage.",
-      "I like planning my attacks to trigger the best elemental reactions.",
+      "I dislike planning my attacks to trigger the best elemental reactions.",
       "I prefer being in the thick of the fight rather than supporting from afar.",
     ],
     letters: ["A", "S"],
@@ -14,8 +14,8 @@ const questions = [
     key: "gameplay",
     options: [
       "I get excited when tackling bosses, domains, or Spiral Abyss challenges.",
-      "I love exploring every corner of Teyvat, finding hidden treasures and secrets.",
-      "Completing events, quests, and side content is more fun than challenging battles.",
+      "I exploring is boring, I find fighting more engaging than finding hidden treasures and secrets.",
+      "Completing events, quests, and side content is less fun than challenging battles.",
     ],
     letters: ["D", "E"],
   },
@@ -34,7 +34,7 @@ const questions = [
     key: "lore",
     options: [
       "I focus on understanding the official story.",
-      "I enjoy fan theories, memes, and AU ideas.",
+      "I enjoy learning about official lore fan theories, memes, fanfics, etc.",
       "I pay attention to canonical in-game lore.",
     ],
     letters: ["C", "N"],
