@@ -14,7 +14,7 @@ const questions = [
     key: "gameplay",
     options: [
       "I get excited when tackling bosses, domains, or Spiral Abyss challenges.",
-      "I exploring is boring, I find fighting more engaging than finding hidden treasures and secrets.",
+      "Exploring is boring; I find fighting more engaging than finding hidden treasures and secrets.",
       "Completing events, quests, and side content is less fun than challenging battles.",
     ],
     letters: ["D", "E"],
